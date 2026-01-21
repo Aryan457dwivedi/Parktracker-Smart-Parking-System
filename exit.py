@@ -50,7 +50,7 @@ def process_exit():
 
     conn.commit()
 
-    # 🔥 Notify dashboard
+    # Notify dashboard
     try:
         requests.get("http://127.0.0.1:5000/notify")
     except:
