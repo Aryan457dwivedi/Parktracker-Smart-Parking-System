@@ -1,10 +1,8 @@
-# Automated Parking Allocation System
+An Automated Parking Allocation System developed using Python, OpenCV, Haar Cascade, Tesseract OCR, Flask, and MySQL that detects license plates, allocates parking slots automatically, and computes parking charges.
 
-## 📌 Overview
 
-This project is an **Automated Parking Allocation System** using **OpenCV and MySQL**. It detects vehicle number plates using **Tesseract OCR**, assigns parking slots, and calculates parking fees.
 
-## 🚀 Features
+##  Features
 
 - **Number Plate Detection** using OpenCV & Tesseract
 - **Automatic Parking Slot Allocation** (Hexadecimal from 1 to 50)
@@ -13,33 +11,40 @@ This project is an **Automated Parking Allocation System** using **OpenCV and My
 - **MySQL Database Integration**
 - **Bill Generation upon Exit**
 
----
+##  Demo 
+<img width="2879" height="1224" alt="Screenshot 2026-01-22 050001" src="https://github.com/user-attachments/assets/0004c449-4445-4554-b0a7-78d5e36df82a" />
+<img width="2879" height="1768" alt="Screenshot 2026-01-22 045657" src="https://github.com/user-attachments/assets/180c9f10-0754-4b19-a186-3bd471532483" />
+<img width="2879" height="1799" alt="Screenshot 2026-01-22 045644" src="https://github.com/user-attachments/assets/baf522f3-702b-45fa-b0f1-70edf1b4cc46" />
 
-## 🛠️ Setup & Installation
 
-### 1️⃣ Install Dependencies
+##  Tech Stack
 
-Run the following command to install required Python packages:
+- **Backend:** Python, Flask  
+- **Computer Vision:** OpenCV, Tesseract OCR  
+- **Database:** MySQL  
+- **Frontend:** HTML, CSS, JavaScript  
+- **Tools:** Git, GitHub  
 
-```sh
-pip install opencv-python pytesseract mysql-connector-python
+
+
+##  Setup & Installation
+
+### 1️ Install Dependencies
+
+```bash
+pip install opencv-python pytesseract mysql-connector-python flask flask-socketio
 ```
+2️ Configure Tesseract OCR
+Download from:
+https://github.com/UB-Mannheim/tesseract/wiki
 
-### 2️⃣ Configure Tesseract OCR
-
-Download and install [Tesseract OCR](https://github.com/UB-Mannheim/tesseract/wiki). Then, update the **Tesseract path** in `prg.py`:
-
-```python
+Update path in up.py:
+```bash
 pytesseract.pytesseract.tesseract_cmd = r"C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 ```
-
-### 3️⃣ MySQL Database Setup
-
-Create a **MySQL database** and run the following SQL command to create the `parking_records` table:
-
-```sql
+3️ MySQL Database Setup
+```bash
 CREATE DATABASE parking_db;
-
 USE parking_db;
 
 CREATE TABLE parking_records (
@@ -51,50 +56,54 @@ CREATE TABLE parking_records (
     fee DECIMAL(10,2) DEFAULT NULL
 );
 ```
+4️ Update Database Credentials
+Edit app.py, entry.py, exit.py
 
-### 4️⃣ Update Database Credentials
-
-Modify `entry.py` and `exit.py` with your MySQL credentials:
-
-```python
+```bash
 conn = mysql.connector.connect(
     host="localhost",
-    user="root",  # Change this
-    password="yourpassword",  # Change this
+    user="root",
+    password="YOUR_PASSWORD",
     database="parking_db"
 )
 ```
 
----
+## Usage
+Start Web Dashboard
+```bash
+python app.py
+```
+Open browser:
 
-## 🚘 Usage
+```bash
+http://127.0.0.1:5000
+```
+## Vehicle Entry
+```bash
 
-### 📥 Vehicle Entry (Run `entry.py`)
-
-```sh
 python entry.py
 ```
+- Detects plate number
 
-- **Detects plate number**
-- **Assigns a parking slot**
-- **Saves entry time in the database**
+- Assigns parking slot
 
-### 📤 Vehicle Exit (Run `exit.py`)
+- Stores entry time
 
-```sh
+## Vehicle Exit
+```bash
+
 python exit.py
 ```
+- Detects plate number
 
-- **Detects plate number**
-- **Checks if the vehicle exists in the database**
-- **Adds exit time & calculates fee**
-- **Prints the parking bill**
+- Calculates bill
 
----
+- Updates database
 
-## 📜 Example Bill Output
+- Displays receipt
 
-```
+## Sample Bill Output
+```bash
 ========= PARKING BILL =========
 Plate Number: KA01AB1234
 Parking Slot: A
@@ -104,14 +113,11 @@ Duration    : 2.5 hours
 Total Fee   : ₹25.00
 ================================
 ```
+## Author
 
----
+Aryan Dwivedi
 
-## 📌 Future Enhancements
+Final Year CSE Student
 
-- ✅ SMS/Email Notifications for Bills
-- ✅ Web Dashboard for Parking Management
-- ✅ Real-Time Slot Availability Tracking
-
-📩 **Have suggestions? Feel free to contribute!** 🚀
+Python | AI | Full Stack
 
