@@ -7,7 +7,7 @@ from up import prg  # Import the function from your existing code
 conn = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Aryan@457",   # temporary
+    password="Enter_Your_Password",   # temporary
     database="parking_db"
 )
 
