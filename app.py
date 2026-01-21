@@ -35,7 +35,7 @@ def status():
 
     return jsonify(slots)
 
-# 🔔 SOCKET NOTIFY
+#  SOCKET NOTIFY
 @app.route("/notify")
 def notify():
     socketio.emit("update")
@@ -53,7 +53,7 @@ def run_exit():
     subprocess.Popen(["python", "exit.py"])
     return "Exit started"
 
-# 📋 RECENT ACTIVITY LOGS
+#  RECENT ACTIVITY LOGS
 @app.route("/api/logs")
 def logs():
     conn = get_connection()
