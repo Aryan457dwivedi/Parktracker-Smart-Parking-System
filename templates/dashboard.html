@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARKMATE Dashboard</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+
+<header>
+    <h1> PARK TRACKER</h1>
+    <p class="subtitle">Smart Parking Management System</p>
+</header>
+
+<!-- STATS -->
+<div class="stats-container">
+    <div class="stat-card">
+        <div class="stat-label">Available Slots</div>
+        <div class="stat-value stat-available" id="availableCount">0</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">Occupied Slots</div>
+        <div class="stat-value stat-occupied" id="occupiedCount">0</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">Total Capacity</div>
+        <div class="stat-value stat-total" id="totalCount">50</div>
+    </div>
+</div>
+
+<!-- CONTROL BUTTONS -->
+<div class="controls">
+    <button onclick="runEntry()"><span> Vehicle Entry</span></button>
+    <button onclick="runExit()"><span> Vehicle Exit</span></button>
+</div>
+
+<!-- PARKING GRID -->
+<div class="grid-section">
+    <h3 class="section-title">Parking Layout</h3>
+    <div id="grid"></div>
+</div>
+
+<!-- ACTIVITY LOG -->
+<div class="activity-section">
+    <h2> Recent Activity</h2>
+
+    <div class="table-container">
+        <table id="logTable">
+            <thead>
+                <tr>
+                    <th>Plate</th>
+                    <th>Slot</th>
+                    <th>Entry Time</th>
+                    <th>Exit Time</th>
+                    <th>Bill (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+const socket = io();
+
+/* RUN SCRIPTS */
+function runEntry(){ fetch("/run-entry"); }
+function runExit(){ fetch("/run-exit"); }
+
+/* LOAD GRID */
+function loadStatus(){
+ fetch("/api/status")
+ .then(res=>res.json())
+ .then(data=>{
+
+    const grid=document.getElementById("grid");
+    grid.innerHTML="";
+
+    let available=0, occupied=0;
+
+    for(let i=1;i<=50;i++){
+        let slot=i.toString(16).toUpperCase();
+        let div=document.createElement("div");
+
+        let state=data[slot]||"available";
+        div.className="slot "+state;
+        div.innerText="Slot "+slot;
+
+        state=="available"?available++:occupied++;
+        grid.appendChild(div);
+    }
+
+    document.getElementById("availableCount").innerText=available;
+    document.getElementById("occupiedCount").innerText=occupied;
+    document.getElementById("totalCount").innerText=50;
+ });
+}
+
+/* LOAD ACTIVITY TABLE */
+function loadLogs(){
+ fetch("/api/logs")
+ .then(res=>res.json())
+ .then(data=>{
+    let tbody=document.querySelector("#logTable tbody");
+    tbody.innerHTML="";
+
+    data.forEach(row=>{
+        tbody.innerHTML+=`
+        <tr>
+            <td>${row.plate}</td>
+            <td>${row.slot}</td>
+            <td>${row.entry}</td>
+            <td>${row.exit}</td>
+            <td>${row.fee}</td>
+        </tr>`;
+    })
+ });
+}
+
+/* INITIAL LOAD */
+loadStatus();
+loadLogs();
+
+/* REAL TIME UPDATE */
+socket.on("update",()=>{
+ loadStatus();
+ loadLogs();
+});
+</script>
+
+</body>
+</html>
